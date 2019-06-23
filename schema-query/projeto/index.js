@@ -1,29 +1,9 @@
 const { ApolloServer, gql } = require('apollo-server')
+const { importSchema } = require('graphql-import')
+const resolvers = require('./resolvers')
 
-const typeDefs = gql`
-    # Pontos de entrada da sua API!
+const schemaPath = './schema/index.graphql'
 
-    # String! (Tem que retornar obrigatoriamente uma string)
+const server = new ApolloServer({ typeDefs: importSchema(schemaPath), resolvers })
 
-    type Query {
-        ola: String
-    }
-
-` //Tagged template ES6
-
-const resolvers = {
-    Query: {
-        ola() {
-            return 'Olá, Mundo! Estou aprendendo GraphQL'
-        }
-    }
-}
-
-const server = new ApolloServer({
-    typeDefs,
-    resolvers
-})
-
-server.listen().then(({ url }) => {
-    console.log(`Executando em ${url}`)
-})
+server.listen().then(({ url }) => { console.log(`Executando em ${url}`) })
